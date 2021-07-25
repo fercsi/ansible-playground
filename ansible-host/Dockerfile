@@ -1,0 +1,26 @@
+FROM debian:buster-slim
+
+MAINTAINER Ferenc Vajda, ferenc.vajda@gmail.com
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update; \
+    apt-get -y install \
+        openssh-server \
+        less \
+        vim \
+        python \
+        ; \
+
+    mkdir /var/run/sshd; \
+    mkdir /root/.ssh; \
+
+    echo 'root:root' | chpasswd; \
+
+    sed -i 's/UsePAM yes/#&/g' /etc/ssh/sshd_config; \
+    sed -Ei 's/^#?\s*(PermitRootLogin)\s.*/\1 yes/' /etc/ssh/sshd_config
+
+EXPOSE 22
+
+CMD    ["/usr/sbin/sshd", "-D"]
+

@@ -1,0 +1,48 @@
+version: "3.6"
+services:
+    ansible:
+        build: ansible-server
+        ports:
+            - 22:22
+        volumes:
+            - ./work:/var/work
+        container_name: ansible
+        hostname: ansible
+        restart: always
+        depends_on:
+            - host1
+            - host2
+            - host3
+        networks:
+            - default
+            - private
+    host1:
+        build: ansible-host
+        ports:
+            - 22:22
+        container_name: host1
+        hostname: host1
+        restart: always
+        networks:
+            - private
+    host2:
+        build: ansible-host
+        ports:
+            - 22:22
+        container_name: host2
+        hostname: host2
+        restart: always
+        networks:
+            - private
+    host3:
+        build: ansible-host
+        ports:
+            - 22:22
+        container_name: host3
+        hostname: host3
+        restart: always
+        networks:
+            - private
+networks:
+    private:
+        internal: true
