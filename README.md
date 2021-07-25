@@ -120,13 +120,13 @@ number  of containers  does  not  match your  needs  and  change both  `
 hostname` and `container_name`.
 
 Initialization process  creates ansible `hosts`,  so you have  to inform
-ansible server this change setting environment variable `ANSIBLE_HOSTS`.
+ansible server this change setting environment variable `APG_HOSTS`.
 So  add   the  followings  to   the  ansible  server   configuration  in
 `docker-compose`, if you renamed your hosts:
 
 ```
     environment:
-        ANSIBLE_HOSTS: frontend backend db
+        APG_HOSTS: frontend backend db
 ```
 
 Similarly, update `depends_on`. This is necessary for the initialization
@@ -138,7 +138,7 @@ If you need  a more complex configuration (e.g.  grouping hosts), create
 your own `hosts`  file, upload it to  the server (the easiest  way is to
 simply put it  into the work directory somewhere, but  creating your own
 Docker image  can be also a  way) and pass the  path of the file  in the
-environment variable  `ANSIBLE_HOSTS_FILE`. If  this variable  is given,
+environment variable  `APG_HOSTS_FILE`. If  this variable  is given,
 the file will be copied instead of creating an own one.
 
 ### Fingerprint changes
@@ -157,7 +157,7 @@ ssh-keygen -R $(docker inspect -f '{{.NetworkSettings.Networks.ansible_default.I
 Since this is only a playground, root of the hosts (and also that of the
 server)  has a  simple  password 'root'.  If you  use  a different  host
 solution  with  different  root  password,  you can  change  it  by  the
-environment variable `HOST_PASSWORD`.  Note, that all of  the hosts must
+environment variable `APG_HOST_PASSWORD`.  Note, that all of  the hosts must
 be the same password, using different ones is not supported.
 
 ### Example confuguration
@@ -178,8 +178,8 @@ services:
             - web
             - db
         environment:
-            ANSIBLE_HOSTS: web db
-            HOST_PASSWORD: pwd123
+            APG_HOSTS: web db
+            APG_HOST_PASSWORD: pwd123
         networks:
             - default
     web:
