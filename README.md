@@ -16,9 +16,9 @@ docker-compose up -d
 To practice the use of ansible we created a simple playground. The
 default configuration can be seen on the following figure.
 
-              +---------+
-              | ansible |
-              +---------+
+            +------------+
+            | controller |
+            +------------+
                    | private nw
         +----------+----------+
         |          |          |
@@ -31,7 +31,7 @@ There are some hints in
 [Create alternative configurations](#create-alternative-configurations).
 below.
 
-### Ansible server (`ansible`)
+### Ansible controller (`controller`)
 
 Server is  based on  a simple  Debian distribution  (`buster-slim`), but
 there are  some handy tools  installed. The most important is `ansible`,
@@ -39,31 +39,31 @@ but also `less` and `vim` can be very helpful during the tests.
 
 During  the first  run's initialization,  server connects  to hosts  and
 stores fingerprints of them in `known\_hosts`, so hosts  can be accessed
-from server easily. Also, ansible hosts are configured.
+from server easily. Also, ansible inventory is configured.
 
 ### Ansible host (`host1`..`host3`)
 
-Similarly to the  server, hosts are also based on  Debian. Beyond `less`
-and  `vim`, also  Python 2  is installed,  because ansible  needs it  to
-proceed tasks.  Ansible itself is  not installed,  because it has  to be
-installed on the server only.
+Similarly to the server, hosts are also based on Debian. On hosts Python
+2  is installed,  because ansible  needs  it to  proceed tasks.  Ansible
+itself  is  not  installed,  because  it has  to  be  installed  on  the
+controller only.
 
 ## Login to Ansible server
 
-To login to the ansible server (`ansible`):
+To login to the ansible server (`controller`):
 
 ```
-docker exec -it ansible /bin/bash
+docker exec -it controller /bin/bash
 ```
 
 Alternatively, you can determine the IP  address of the server and login
 with ssh. To get IP address(es):
 
 ```
-docker inspect -f '{{.NetworkSettings.Networks.ansible_default.IPAddress}}' ansible
+docker inspect -f '{{.NetworkSettings.Networks.ansible_default.IPAddress}}' controller
 ```
 
-Note,  that ansible  server has  2 IP  adresses if  the hosts  are on  a
+Note, that ansible  controller has 2 IP  adresses if the hosts  are on a
 private  network. The  previous  command  prints only  the  ones on  the
 default network.
 
@@ -74,22 +74,22 @@ ssh root@<IP address>
 Using a single command:
 
 ```
-ssh root@$(docker inspect -f '{{.NetworkSettings.Networks.ansible_default.IPAddress}}' ansible)
+ssh root@$(docker inspect -f '{{.NetworkSettings.Networks.ansible_default.IPAddress}}' controller)
 ```
 
 ## Using the playground
 
 Using the  default configuration,  you can easily  access all  the hosts
-from the server (without entering a password):
+from the controller (without entering a password):
 
 ```
 ssh host1
 ```
 
 This  is important  for  ansible to  connect easily  to  them. To  check
-whether  ansible  can also  connect  to  all  of  the hosts  defined  in
-`/etc/ansible/hosts`  (this  is   configured  automatically  during  the
-initialization of the ansible server):
+whether ansible  can also  connect to  all of the  hosts defined  in the
+inventory  -  `/etc/ansible/hosts`  (this  is  configured  automatically
+during the initialization of the ansible server):
 
 
 ```
@@ -114,13 +114,13 @@ configurations built on them.
 
 ### Different hosts
 
-6To  add simply  more hosts,  or you  would like  to rename  them, simply
+To  add simply  more hosts,  or you  would like  to rename  them, simply
 modify  `docker-compose` accordingly.  Add or  remove containers  if the
 number  of containers  does  not  match your  needs  and  change both  `
 hostname` and `container_name`.
 
 Initialization process  creates ansible `hosts`,  so you have  to inform
-ansible server this change setting environment variable `APG_HOSTS`.
+ansible controller this change setting environment variable `APG_HOSTS`.
 So  add   the  followings  to   the  ansible  server   configuration  in
 `docker-compose`, if you renamed your hosts:
 
@@ -130,16 +130,20 @@ So  add   the  followings  to   the  ansible  server   configuration  in
 ```
 
 Similarly, update `depends_on`. This is necessary for the initialization
-phase, so that the server can connect to the hosts.
+phase, so that the controller can connect to the hosts.
 
 ### Different host configuration
 
 If you need  a more complex configuration (e.g.  grouping hosts), create
-your own `hosts`  file, upload it to  the server (the easiest  way is to
-simply put it  into the work directory somewhere, but  creating your own
-Docker image  can be also a  way) and pass the  path of the file  in the
-environment variable  `APG_HOSTS_FILE`. If  this variable  is given,
+your own inventory (`hosts` file), upload  it to the server (the easiest
+way is to simply put it  into the work directory somewhere, but creating
+your own Docker image  can be also a way) and pass the  path of the file
+in the environment variable `APG_HOSTS_FILE`. If this variable is given,
 the file will be copied instead of creating an own one.
+
+Note  that, since  ansible  configuration (including  the inventory)  is
+created per  platform, in global level  a single list of  involved hosts
+can be sufficient for initial tests.
 
 ### Fingerprint changes
 
@@ -149,7 +153,8 @@ login to ansible  server with ssh instead of executing  a bash directly,
 you have to remove previous fingerprint by:
 
 ```
-ssh-keygen -R $(docker inspect -f '{{.NetworkSettings.Networks.ansible_default.IPAddress}}' ansible)
+ssh-keygen -R $(docker inspect -f '{{.NetworkSettings.Networks.ansible_default.IPAddress}}'
+controller)
 ```
 
 ### Different `root` password
@@ -158,21 +163,21 @@ Since this is only a playground, root of the hosts (and also that of the
 server)  has a  simple  password 'root'.  If you  use  a different  host
 solution  with  different  root  password,  you can  change  it  by  the
 environment variable `APG_HOST_PASSWORD`.  Note, that all of  the hosts must
-be the same password, using different ones is not supported.
+havr the same password, using different ones is not supported.
 
 ### Example confuguration
 
 ```
 version: "3.6"
 services:
-    ansible:
-        image: fercsi/ansible-server
+    controller:
+        image: fercsi/ansible-controller
         ports:
             - 22:22
         volumes:
             - ./work:/var/work
-        container_name: ansible
-        hostname: ansible
+        container_name: controller
+        hostname: controller
         restart: always
         depends_on:
             - web

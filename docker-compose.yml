@@ -1,13 +1,13 @@
 version: "3.6"
 services:
     ansible:
-        build: ansible-server
+        image: fercsi/ansible-controller
         ports:
             - 22:22
         volumes:
             - ./work:/var/work
-        container_name: ansible
-        hostname: ansible
+        container_name: controller
+        hostname: controller
         restart: always
         depends_on:
             - host1
@@ -17,7 +17,7 @@ services:
             - default
             - private
     host1:
-        build: ansible-host
+        image: fercsi/ansible-host
         ports:
             - 22:22
         container_name: host1
@@ -26,7 +26,7 @@ services:
         networks:
             - private
     host2:
-        build: ansible-host
+        image: fercsi/ansible-host
         ports:
             - 22:22
         container_name: host2
@@ -35,7 +35,7 @@ services:
         networks:
             - private
     host3:
-        build: ansible-host
+        image: fercsi/ansible-host
         ports:
             - 22:22
         container_name: host3
