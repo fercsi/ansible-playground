@@ -1,4 +1,5 @@
-FROM debian:buster-slim
+#FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 MAINTAINER Ferenc Vajda, ferenc.vajda@gmail.com
 
@@ -9,12 +10,12 @@ RUN apt-get update; \
         openssh-server \
         python \
         ; \
-
+        \
     mkdir /var/run/sshd; \
     mkdir /root/.ssh; \
-
+        \
     echo 'root:root' | chpasswd; \
-
+        \
     sed -i 's/UsePAM yes/#&/g' /etc/ssh/sshd_config; \
     sed -Ei 's/^#?\s*(PermitRootLogin)\s.*/\1 yes/' /etc/ssh/sshd_config
 

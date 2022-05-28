@@ -1,4 +1,5 @@
-FROM debian:buster-slim
+#FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 MAINTAINER Ferenc Vajda, ferenc.vajda@gmail.com
 
@@ -12,17 +13,17 @@ RUN apt-get update; \
         sshpass \
         software-properties-common \
         ; \
-
+        \
     apt-add-repository ppa:ansible/ansible; \
     apt-get update; \
     apt-get -y install ansible; \
-
+        \
     mkdir -p /var/work;\
     mkdir -p /var/run/sshd; \
     mkdir -p /root/.ssh; \
-
+        \
     echo 'root:root' | chpasswd; \
-
+        \
     sed -i 's/UsePAM yes/#&/g' /etc/ssh/sshd_config; \
     sed -Ei 's/^#?\s*(PermitRootLogin)\s.*/\1 yes/' /etc/ssh/sshd_config
 

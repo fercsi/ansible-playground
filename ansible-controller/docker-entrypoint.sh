@@ -18,7 +18,7 @@ if [ ! -f /var/run/ansible-playground ]; then
         echo "$h:"
         ssh-keyscan -H $h >>/root/.ssh/known_hosts
         echo $APG_HOST_PASSWORD | sshpass ssh-copy-id -f "root@$h"
-        echo $h >>/etc/ansible/hosts
+        #echo $h >>/etc/ansible/hosts
     done
     echo [$(date -Iseconds)] Inventory initialized. > /var/run/ansible-playground
 fi
