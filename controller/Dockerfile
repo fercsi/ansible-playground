@@ -1,5 +1,4 @@
-#FROM debian:buster-slim
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 MAINTAINER Ferenc Vajda, ferenc.vajda@gmail.com
 
@@ -36,4 +35,3 @@ EXPOSE 22
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 CMD    ["/usr/sbin/sshd", "-D"]
-

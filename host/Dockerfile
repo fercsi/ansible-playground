@@ -1,5 +1,4 @@
-#FROM debian:buster-slim
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 MAINTAINER Ferenc Vajda, ferenc.vajda@gmail.com
 
@@ -8,7 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update; \
     apt-get -y install \
         openssh-server \
-        python \
+        python3 \
         ; \
         \
     mkdir /var/run/sshd; \
@@ -22,4 +21,3 @@ RUN apt-get update; \
 EXPOSE 22
 
 CMD    ["/usr/sbin/sshd", "-D"]
-
