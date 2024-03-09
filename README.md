@@ -44,7 +44,7 @@ from server easily. Also, ansible inventory is configured.
 ### Ansible host (`host1`..`host3`)
 
 Similarly to the server, hosts are also based on Debian. On hosts Python
-2  is installed,  because ansible  needs  it to  proceed tasks.  Ansible
+3  is installed,  because ansible  needs  it to  proceed tasks.  Ansible
 itself  is  not  installed,  because  it has  to  be  installed  on  the
 controller only.
 
