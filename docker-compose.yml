@@ -1,7 +1,7 @@
 version: "3.6"
 services:
     ansible:
-        image: fercsi/ansible-controller
+        image: fercsi/ansible-playground:controller
         ports:
             - 22:22
         volumes:
@@ -17,7 +17,7 @@ services:
             - default
             - private
     host1:
-        image: fercsi/ansible-host
+        image: fercsi/ansible-playground:host
         ports:
             - 22:22
         container_name: host1
@@ -26,7 +26,7 @@ services:
         networks:
             - private
     host2:
-        image: fercsi/ansible-host
+        image: fercsi/ansible-playground:host
         ports:
             - 22:22
         container_name: host2
@@ -35,7 +35,7 @@ services:
         networks:
             - private
     host3:
-        image: fercsi/ansible-host
+        image: fercsi/ansible-playground:host
         ports:
             - 22:22
         container_name: host3
