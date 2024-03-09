@@ -33,8 +33,8 @@ below.
 
 ### Ansible controller (`controller`)
 
-Server is  based on  a simple  Debian distribution  (`buster-slim`), but
-there are  some handy tools  installed. The most important is `ansible`,
+Server is based  on a simple Debian  distribution (`bookworm-slim`), but
+there are some  handy tools installed. The most  important is `ansible`,
 but also `less` and `vim` can be very helpful during the tests.
 
 During  the first  run's initialization,  server connects  to hosts  and
@@ -162,8 +162,8 @@ controller)
 Since this is only a playground, root of the hosts (and also that of the
 server)  has a  simple  password 'root'.  If you  use  a different  host
 solution  with  different  root  password,  you can  change  it  by  the
-environment variable `APG_HOST_PASSWORD`.  Note, that all of  the hosts must
-havr the same password, using different ones is not supported.
+environment variable  `APG_HOST_PASSWORD`. Note,  that all of  the hosts
+must havr the same password, using different ones is not supported.
 
 ### Example confuguration
 
@@ -171,7 +171,7 @@ havr the same password, using different ones is not supported.
 version: "3.6"
 services:
     controller:
-        image: fercsi/ansible-controller
+        image: fercsi/ansible-playground:controller
         ports:
             - 22:22
         volumes:
