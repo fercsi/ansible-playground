@@ -109,7 +109,7 @@ the docker exec method, directory is selected automatically.
 ## Create alternative configurations
 
 You can derive your own server  and host docker images from the default,
-but in most cases they are sufficient for all needsx. You can create any
+but in most cases they are sufficient for all needs. You can create  any
 configurations built on them.
 
 ### Different hosts
@@ -163,7 +163,7 @@ Since this is only a playground, root of the hosts (and also that of the
 server)  has a  simple  password 'root'.  If you  use  a different  host
 solution  with  different  root  password,  you can  change  it  by  the
 environment variable  `APG_HOST_PASSWORD`. Note,  that all of  the hosts
-must havr the same password, using different ones is not supported.
+must have the same password, using different ones is not supported.
 
 ### Example confuguration
 
