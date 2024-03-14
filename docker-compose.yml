@@ -13,6 +13,8 @@ services:
             - host1
             - host2
             - host3
+        environment:
+          APG_HOSTS: host1 host2 host3
         networks:
             - default
             - private
