@@ -1,0 +1,9 @@
+---
+- name: Collect OS info
+  hosts: all
+  gather_facts: yes
+  become: false
+  tasks:
+  - name: Show OS diatro and version info
+    debug:
+      msg: "{{ inventory_hostname }}: {{ ansible_distribution }} {{ ansible_distribution_version}}"
