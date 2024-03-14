@@ -1,0 +1,23 @@
+FROM almalinux:9
+
+MAINTAINER Ferenc Vajda, ferenc.vajda@gmail.com
+
+RUN yum update; \
+    yum -y install \
+        openssh-server \
+        python3 \
+        ; \
+        \
+    mkdir -p /var/run/sshd; \
+    mkdir -p /root/.ssh; \
+        \
+    echo 'root:root' | chpasswd; \
+        \
+    sed -i 's/UsePAM yes/#&/g' /etc/ssh/sshd_config; \
+    sed -Ei 's/^#?\s*(PermitRootLogin)\s.*/\1 yes/' /etc/ssh/sshd_config; \
+    cd /etc/ssh; \
+    ssh-keygen -A
+
+EXPOSE 22
+
+CMD    ["/usr/sbin/sshd", "-D"]
