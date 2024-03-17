@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM debian:12
 
 MAINTAINER Ferenc Vajda, ferenc.vajda@gmail.com
 
@@ -10,8 +10,8 @@ RUN apt-get update; \
         python3 \
         ; \
         \
-    mkdir /var/run/sshd; \
-    mkdir /root/.ssh; \
+    mkdir -p /var/run/sshd; \
+    mkdir -p /root/.ssh; \
         \
     echo 'root:root' | chpasswd; \
         \
