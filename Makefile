@@ -8,7 +8,7 @@ MKD = util/mkdocker.py
 TESTIMG = util/testimg.sh
 DBUILD = docker build
 DPUSH = docker push
-REPO = fercsi/ansible-playbook
+REPO = fercsi/ansible-playground
 
 ########################################
 # CREATE Dockerfiles
