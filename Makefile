@@ -104,6 +104,9 @@ push-debian: $(addprefix push-, $(DEBIAN_VERSIONS))
 .PHONY: push-ubuntu
 push-ubuntu: $(addprefix push-, $(UBUNTU_VERSIONS))
 
+.PHONY: push-redhat
+push-redhat: $(addprefix push-, $(REDHAT_VERSIONS))
+
 .PHONY: push-almalinux
 push-almalinux: $(addprefix push-, $(ALMALINUX_VERSIONS))
 
