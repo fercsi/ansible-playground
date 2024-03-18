@@ -1,8 +1,9 @@
-FAMILIES := debian ubuntu almalinux
+FAMILIES := debian ubuntu redhat almalinux
 DEBIAN_VERSIONS := deb11 deb12
 UBUNTU_VERSIONS := u20 u22 u24
+REDHAT_VERSIONS := rh8 rh9
 ALMALINUX_VERSIONS := alma8 alma9
-ALL_VERSIONS = $(DEBIAN_VERSIONS) $(UBUNTU_VERSIONS) $(ALMALINUX_VERSIONS)
+ALL_VERSIONS = $(DEBIAN_VERSIONS) $(UBUNTU_VERSIONS) $(REDHAT_VERSIONS) $(ALMALINUX_VERSIONS)
 
 MKD = util/mkdocker.py
 TESTIMG = util/testimg.sh
@@ -22,6 +23,9 @@ create-debian: $(addprefix create-, $(DEBIAN_VERSIONS))
 .PHONY: create-ubuntu
 create-ubuntu: $(addprefix create-, $(UBUNTU_VERSIONS))
 
+.PHONY: create-redhat
+create-redhat: $(addprefix create-, $(REDHAT_VERSIONS))
+
 .PHONY: create-almalinux
 create-almalinux: $(addprefix create-, $(ALMALINUX_VERSIONS))
 
@@ -33,13 +37,16 @@ CREATE_ALL_VERSIONS = $(addprefix create-, $(ALL_VERSIONS))
 $(CREATE_ALL_VERSIONS): create-%: hosts/Dockerfile.%
 
 hosts/Dockerfile.deb%: templates/Dockerfile-debian
-	$(MKD) debian deb$* debian $*
+	$(MKD) debian deb$* debian:$*
 
 hosts/Dockerfile.u%: templates/Dockerfile-debian
-	$(MKD) debian u$* ubuntu $*.04
+	$(MKD) debian u$* ubuntu:$*.04
+
+hosts/Dockerfile.rh%: templates/Dockerfile-redhat
+	$(MKD) redhat rh$* redhat/ubi$*
 
 hosts/Dockerfile.alma%: templates/Dockerfile-redhat
-	$(MKD) redhat alma$* almalinux $*
+	$(MKD) redhat alma$* almalinux:$*
 
 ########################################
 # BUILD IMAGES
@@ -52,6 +59,9 @@ build-debian: $(addprefix build-, $(DEBIAN_VERSIONS))
 
 .PHONY: build-ubuntu
 build-ubuntu: $(addprefix build-, $(UBUNTU_VERSIONS))
+
+.PHONY: build-redhat
+build-redhat: $(addprefix build-, $(REDHAT_VERSIONS))
 
 .PHONY: build-almalinux
 build-almalinux: $(addprefix build-, $(ALMALINUX_VERSIONS))
@@ -71,6 +81,9 @@ test-debian: $(addprefix test-, $(DEBIAN_VERSIONS))
 
 .PHONY: test-ubuntu
 test-ubuntu: $(addprefix test-, $(UBUNTU_VERSIONS))
+
+.PHONY: test-redhat
+test-redhat: $(addprefix test-, $(REDHAT_VERSIONS))
 
 .PHONY: test-almalinux
 test-almalinux: $(addprefix test-, $(ALMALINUX_VERSIONS))

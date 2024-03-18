@@ -1,4 +1,4 @@
-FROM {{image}}
+FROM redhat/ubi8
 
 MAINTAINER Ferenc Vajda, ferenc.vajda@gmail.com
 

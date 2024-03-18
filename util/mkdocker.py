@@ -6,25 +6,23 @@ import sys
 def fail(text, *args, **kwargs):
     print(text, *args, file=sys.stderr, **kwargs)
     print(
-        "Usage: mkdocker FAMILY IMAGE_NAME OS_TYPE VERSION\n"
+        "Usage: mkdocker FAMILY IMAGE_NAME OS_IMAGE\n"
         "FAMILY: debian, redhat\n"
-        "OS_TYPE & OS_VERSION: as stored on Docker hub"
         , file=sys.stderr
     )
     sys.exit(1)
 
 def main():
-    if len(sys.argv) < 5:
+    if len(sys.argv) < 4:
         fail('Not enough arguments')
-    (imtype, imname, ostype, osver) = sys.argv[1:5]
+    (imtype, imname, os_image) = sys.argv[1:4]
     try:
         with open(f'templates/Dockerfile-{imtype}', 'r') as f:
             template = f.read()
     except:
         fail('Could not load template')
     # TODO: use jinja2 later if necessary
-    template = template.replace('{{os}}', ostype)
-    template = template.replace('{{os_version}}', osver)
+    template = template.replace('{{image}}', os_image)
     try:
         with open(f'hosts/Dockerfile-{imname}', 'w') as f:
             f.write(template)

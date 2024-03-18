@@ -1,4 +1,4 @@
-FROM {{os}}:{{os_version}}
+FROM {{image}}
 
 MAINTAINER Ferenc Vajda, ferenc.vajda@gmail.com
 
