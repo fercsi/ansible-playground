@@ -1,0 +1,30 @@
+---
+- name: Gather User Information
+  hosts: host1
+  tasks:
+    - name: Get user information
+      command: getent passwd
+      register: passwd_output
+
+    #>- debug:
+        #>var: passwd_output
+
+    - name: Extract user data
+      set_fact:
+        #>users_data: "{{ passwd_output.stdout_lines | map('split', ':') | map({'name': '{{ item.0 }}', 'shell': '{{ item.6 }}'}) | list }}"
+        #>users_data: "{{ passwd_output.stdout_lines | map('split', ':') | map({'name': '{{ item.0 }}', 'shell': '{{ item.6 }}'}) | list }}"
+        #>users_data: "{{ passwd_output.stdout_lines | map('split', ':') | map('{{item.1}}')}}"
+        #>users_data: "{{ passwd_output.stdout_lines | map('split', ':') | map('{{\"tt\"}}')}}"
+        users_data: "{{ passwd_output.stdout_lines | map('split', ':') | map(attribute=0) }}"
+        #>users_data: "{{ passwd_output.stdout_lines | map('split', ':') }}"
+      when: passwd_output.stdout_lines | length > 0
+
+    - debug:
+        var: users_data
+
+    #>- name: Write to CSV file
+      #>lineinfile:
+        #>path: /path/to/output.csv
+        #>line: "{{ item.name }},{{ item.shell }}"
+      #>with_items: "{{ users_data }}"
+      #>when: users_data is defined

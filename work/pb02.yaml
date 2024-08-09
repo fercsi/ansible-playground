@@ -1,0 +1,21 @@
+---
+#>- name: Gather User Information
+- hosts: host1
+  tasks:
+    - name: Get user information
+      command: getent passwd
+      register: passwd_output
+
+    - name: Extract user data
+      set_fact:
+        users_data: "{{ passwd_output.stdout_lines | map('split', ':') | map({'name': '{{ item.0 }}', 'shell': '{{ item.6 }}'}) | list }}"
+      when: passwd_output.stdout_lines | length > 0
+
+    - name: Write to CSV file
+      csv_table:
+        path: /path/to/output.csv
+        header:
+          - Name
+          - Shell
+        data: "{{ users_data }}"
+      when: users_data is defined

@@ -1,0 +1,25 @@
+---
+- name: Extract Second and Third Values
+  hosts: localhost
+  gather_facts: false
+  vars:
+    input_list:
+      - "value1:second1:third1"
+      - "value2:second2:third2"
+      - "value3:second3:third3"
+
+  tasks:
+    - set_fact:
+        counter: 1
+
+    - name: "Task 1"
+      set_fact:
+        counter: "{{counter|int+1}}"
+        success: "{% if counter=='3' %}{{item}}{% else %}counter{% endif %}"
+      loop: "{{input_list}}"
+
+    - debug:
+        var: counter
+
+    - debug:
+        var: success

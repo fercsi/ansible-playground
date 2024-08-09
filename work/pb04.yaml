@@ -1,0 +1,17 @@
+---
+- name: Extract Second and Third Values
+  hosts: localhost
+  gather_facts: false
+  vars:
+    input_list:
+      - "value1:second1:third1"
+      - "value2:second2:third2"
+      - "value3:second3:third3"
+
+  tasks:
+    - name: Create list with second and third values
+      set_fact:
+        extracted_values: "{{ input_list | map('split', ':') | map(attribute=1, attribute=2) | list }}"
+
+    - debug:
+        var: extracted_values

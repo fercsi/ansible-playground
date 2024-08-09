@@ -1,0 +1,25 @@
+- hosts: all
+
+  vars:
+
+    users_sh: "{{ getent_passwd|dict2items|
+                  selectattr('value', 'contains', '/bin/bash')|
+                  map(attribute='key') }}"
+    users_nl: "{{ getent_passwd|dict2items|
+                  selectattr('value', 'contains', '/usr/sbin/nologin')|
+                  map(attribute='key') }}"
+  tasks:
+
+    - getent:
+        database: passwd
+
+    - debug:
+        var: users_sh|to_yaml
+    - debug:
+        var: users_nl|to_yaml
+
+    - authorized_key:
+        user: "{{ item }}"
+        key: "{{ lookup('file', 'defaults/main.yml') }}"
+      loop: "{{ users_sh }}"
+      when: not_dry_run|d(false)|bool
