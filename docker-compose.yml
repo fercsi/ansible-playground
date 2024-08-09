@@ -15,6 +15,9 @@ services:
             - host3
         environment:
           APG_HOSTS: host1 host2 host3
+          APG_INVENTORY_GROUPS: h1 h2
+          APG_INVGROUP_h1: host1
+          APG_INVGROUP_h2: host2 host3
         networks:
             - default
             - private
@@ -28,7 +31,7 @@ services:
         networks:
             - private
     host2:
-        image: fercsi/ansible-playground:host
+        image: fercsi/ansible-playground:u22-host
         ports:
             - 22:22
         container_name: host2
@@ -37,7 +40,7 @@ services:
         networks:
             - private
     host3:
-        image: fercsi/ansible-playground:host
+        image: fercsi/ansible-playground:alma9-host
         ports:
             - 22:22
         container_name: host3
