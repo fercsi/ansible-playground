@@ -1,0 +1,9 @@
+---
+scalar: simple scalar
+list:
+  - value 1
+  - value 2
+  - value 3
+dict:
+  name: apple
+  color: red

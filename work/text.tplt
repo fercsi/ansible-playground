@@ -1,0 +1,10 @@
+Template text
+=============
+
+Scalar: {{scalar}}
+
+{% for text in list %}
+* {{text}}
+{% endfor %}
+
+{{dict.color}} {{dict.name}}
