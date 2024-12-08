@@ -22,7 +22,7 @@ services:
             - default
             - private
     host1:
-        image: fercsi/ansible-playground:host
+        image: fercsi/ansible-playground:deb12-host
         ports:
             - 22:22
         container_name: host1
