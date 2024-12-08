@@ -1,8 +1,8 @@
 FROM debian:bookworm-slim
 
-MAINTAINER Ferenc Vajda, ferenc.vajda@gmail.com
+LABEL org.opencontainers.image.authors="Ferenc Vajda, ferenc.vajda@gmail.com"
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update; \
     apt-get -y install \
@@ -13,9 +13,11 @@ RUN apt-get update; \
         software-properties-common \
         ; \
         \
-    apt-add-repository ppa:ansible/ansible; \
-    apt-get update; \
-    apt-get -y install ansible; \
+    apt-get -y install \
+        ansible \
+        python3-ansible \
+        python3-pip; \
+    pip3 install --upgrade --break-system-packages ansible; \
         \
     mkdir -p /var/work;\
     mkdir -p /var/run/sshd; \
