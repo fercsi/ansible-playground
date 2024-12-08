@@ -66,6 +66,10 @@ build-redhat: $(addprefix build-, $(REDHAT_VERSIONS))
 .PHONY: build-almalinux
 build-almalinux: $(addprefix build-, $(ALMALINUX_VERSIONS))
 
+.PHONY: build-controller
+build-controller:
+	$(DBUILD) -t $(REPO):controller -f controller/Dockerfile controller
+
 .PHONY: build-%
 build-%:
 	$(DBUILD) -t $(REPO):$*-host -f hosts/Dockerfile-$* hosts
@@ -109,6 +113,10 @@ push-redhat: $(addprefix push-, $(REDHAT_VERSIONS))
 
 .PHONY: push-almalinux
 push-almalinux: $(addprefix push-, $(ALMALINUX_VERSIONS))
+
+.PHONY: push-controller
+push-controller:
+	$(DPUSH) $(REPO):controller
 
 .PHONY: push-%
 push-%:
